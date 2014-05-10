@@ -71,13 +71,6 @@ parser.add_argument('--bw-host', '-B',
                     help="Bandwidth of host links",
                     required=True)
 
-parser.add_argument('--bw-net', '-b',
-                    dest="bw_net",
-                    type=float,
-                    action="store",
-                    help="Bandwidth of network link",
-                    required=True)
-
 parser.add_argument('--delay',
                     dest="delay",
                     type=float,
@@ -90,31 +83,6 @@ parser.add_argument('--dir', '-d',
                     help="Directory to store outputs",
                     default="results",
                     required=True)
-
-parser.add_argument('-n',
-                    dest="n",
-                    type=int,
-                    action="store",
-                    help="Number of nodes in star.  Must be >= 3",
-                    required=True)
-
-parser.add_argument('--nflows',
-                    dest="nflows",
-                    action="store",
-                    type=int,
-                    help="Number of flows per host (for TCP)",
-                    required=True)
-
-parser.add_argument('--maxq',
-                    dest="maxq",
-                    action="store",
-                    help="Max buffer size of network interface in packets",
-                    default=1000)
-
-parser.add_argument('--cong',
-                    dest="cong",
-                    help="Congestion control algorithm to use",
-                    default="bic")
 
 parser.add_argument('--target',
                     dest="target",
@@ -146,8 +114,9 @@ class StarTopo(Topo):
                  delay=None, maxq=None):
         # Add default members to class.
         super(StarTopo, self ).__init__()
-        self.bw_host = 3 #3Mb/s 
+
         # http://en.wikipedia.org/wiki/Comparison_of_wireless_data_standards
+        self.bw_host = 3 #3Mb/s 
         self.rtt= 500 
         self.create_topology()
 
@@ -171,13 +140,6 @@ def count_connections():
     lines = Popen("grep connected %s | wc -l" % out,
                   shell=True, stdout=PIPE).communicate()[0]
     return int(lines)
-
-def set_q(iface, q):
-    "Change queue size limit of interface"
-    cmd = ("tc qdisc change dev %s parent 5:1 "
-           "handle 10: netem limit %s" % (iface, q))
-    #os.system(cmd)
-    subprocess.check_output(cmd, shell=True)
 
 def set_speed(iface, spd):
     "Change htb maximum rate for interface"
@@ -266,91 +228,6 @@ def format_fraction(fraction):
         return T.colored('%.3f' % fraction, 'green')
     return T.colored('%.3f' % fraction, 'red', attrs=["bold"])
 
-def do_sweep(iface):
-    """Sweep queue length until we hit target utilization.
-       We assume a monotonic relationship and use a binary
-       search to find a value that yields the desired result"""
-
-    bdp = args.bw_net * 2 * args.delay * 1000.0 / 8.0 / 1500.0
-    nflows = args.nflows * (args.n - 1)
-    min_q, max_q = 1, int(bdp)
-
-    # Set a higher speed on the bottleneck link in the beginning so
-    # flows quickly connect
-    set_speed(iface, "2Gbit")
-
-    succeeded = 0
-    wait_time = 300
-    while wait_time > 0 and succeeded != nflows:
-        wait_time -= 1
-        succeeded = count_connections()
-        print 'Connections %d/%d succeeded\r' % (succeeded, nflows),
-        sys.stdout.flush()
-        sleep(1)
-
-    monitor = Process(target=monitor_qlen,
-                      args=(iface, 0.01, '%s/qlen_%s.txt' %
-                            (args.dir, iface)))
-    monitor.start()
-
-    if succeeded != nflows:
-        print 'Giving up'
-        return -1
-
-    # TODO: Set the speed back to the bottleneck link speed.
-    set_speed(iface, "%.2fMbit" % args.bw_net)
-    print "\nSetting q=%d " % max_q,
-    sys.stdout.flush()
-    set_q(iface, max_q)
-
-    # Wait till link is 100% utilised and train
-    reference_rate = 0.0
-    while reference_rate <= args.bw_net * START_BW_FRACTION:
-        rates = get_rates(iface, nsamples=CALIBRATION_SAMPLES+CALIBRATION_SKIP)
-        print "measured calibration rates: %s" % rates
-        # Ignore first N; need to ramp up to full speed.
-        rates = rates[CALIBRATION_SKIP:]
-        reference_rate = median(rates)
-        ru_max = max(rates)
-        ru_stdev = stdev(rates)
-        cprint ("Reference rate median: %.3f max: %.3f stdev: %.3f" %
-                (reference_rate, ru_max, ru_stdev), 'blue')
-        sys.stdout.flush()
-
-    while abs(min_q - max_q) >= 2:
-        mid = (min_q + max_q) / 2
-        print "Trying q=%d  [%d,%d] " % (mid, min_q, max_q),
-        sys.stdout.flush()
-
-        # TODO: Binary search over queue sizes.
-        # (1) Check if a queue size of "mid" achieves required utilization
-        #     based on the median value of the measured rate samples.
-        # (2) Change values of max_q and min_q accordingly
-        #     to continue with the binary search
-
-        # You may use the helper functions set_q(),
-        # get_rates(), avg(), median() and ok()
-
-        # Note: this do_sweep function does a bunch of setup, so do
-        # not recursively call do_sweep to do binary search.
-        set_q(iface, mid)
-        rates=get_rates(iface)
-        avgRate= median(rates)
-        percent=avgRate / float(reference_rate)
-        print "BS result avg=%f, percentage=%f " % (avgRate, percent)
-        if(ok(percent)):
-            max_q = mid -1
-        else:
-            min_q = mid +1
-
-
-    monitor.terminate()
-    print "*** Minq for target: %d" % max_q
-    return max_q
-
-# TODO: Fill in the following function to verify the latency
-# settings of your topology
-
 def verify_latency(net):
     print "verify link latency"
     delta=1
@@ -369,31 +246,6 @@ def verify_latency(net):
     cprint('verify latency...OK','green')
     return True
         
-# TODO: Fill in the following function to verify the bandwidth
-# settings of your topology
-
-def verify_bandwidth(net):
-    print "verify link bandwidth"
-    server=net.getNodeByName('h3')
-    # only test A--C, because other pair is identical
-    for h in ['1']:
-        cmdServer='iperf -s -w 16m' 
-        server.popen(cmdServer)
-        hptr=net.getNodeByName('h'+h)
-        cmd='iperf -c %s -t %d' % (server.IP(), 3600) 
-        hptr.popen(cmd)
-        iface='s0-eth3'
-        rates = get_rates(iface, nsamples=10+CALIBRATION_SKIP)
-        rates = rates[CALIBRATION_SKIP:]
-        reference_rate = median(rates)
-	percent = reference_rate / float(args.bw_net)
-        os.system('killall -9 iperf')
-        if (percent < TARGET_UTIL_FRACTION):
-            cprint('verify bandwidth...FAIL %f/%f' % (percent, TARGET_UTIL_FRACTION),'red')
-            return False
-    cprint('verify bandwidth...OK','green')
-    return True
-
 # TODO: Fill in the following function to
 # Start iperf on the receiver node
 # Hint: use getNodeByName to get a handle on the sender node
@@ -450,7 +302,6 @@ def main():
     # TODO: verify latency and bandwidth of links in the topology you
     # just created.
     verify_latency(net)
-    verify_bandwidth(net)
 
     start_receiver(net)
 
@@ -459,10 +310,6 @@ def main():
     cprint("Starting experiment", "green")
 
     start_senders(net)
-
-    # TODO: change the interface for which queue size is adjusted
-    ret = do_sweep(iface='s0-eth3')
-    total_flows = (args.n - 1) * args.nflows
 
     # Store output.  It will be parsed by run.sh after the entire
     # sweep is completed.  Do not change this filename!
@@ -476,7 +323,6 @@ def main():
     Popen("killall -9 top bwm-ng tcpdump cat mnexec", shell=True).wait()
     stop_tcpprobe()
     end = time()
-    cprint("Sweep took %.3f seconds" % (end - start), "yellow")
 
 if __name__ == '__main__':
     try:
