@@ -146,29 +146,15 @@ class StarTopo(Topo):
                  delay=None, maxq=None):
         # Add default members to class.
         super(StarTopo, self ).__init__()
-        self.n = n
-        self.cpu = cpu
-        self.bw_host = bw_host
-        self.bw_net = bw_net
-        self.delay = delay
-        self.maxq = maxq
+        self.bw_host = 3 #3Mb/s 
+        # http://en.wikipedia.org/wiki/Comparison_of_wireless_data_standards
+        self.rtt= 500 
         self.create_topology()
 
-    # TODO: Fill in the following function to Create the experiment
-    # topology Set appropriate values for bandwidth, delay, and queue
-    # size.
     def create_topology(self):
-        h1=self.addHost('h1')
-        h2=self.addHost('h2')
-        h3=self.addHost('h3')
-        s0=self.addSwitch('s0')
-        self.addLink(h1,s0,bw=self.bw_host,delay='%fms' % (args.delay/2))
-        self.addLink(h2,s0,bw=self.bw_host,delay='%fms' % (args.delay/2))
-
-        rtt=args.delay*2
-        bSize=(self.bw_net*10**6) * rtt/1000.0 / 8 / 1500
-        self.addLink(h3,s0,bw=self.bw_net,delay='%fms' % (args.delay/2), max_queue_size=bSize)
-        pass
+        server=self.addHost('server')
+        client=self.addHost('client')
+        self.addLink(server,client,bw=self.bw_host,delay='%fms' % (args.rtt/2))
 
 def start_tcpprobe():
     "Install tcp_probe module and dump to file"
