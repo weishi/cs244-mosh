@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-"CS244 Assignment 2: Buffer Sizing"
+"CS244 Assignment 3: Mosh"
+# Wei Shi & Sumitra Narayanan
 
 from mininet.topo import Topo
 from mininet.node import CPULimitedHost
@@ -31,19 +32,6 @@ CALIBRATION_SKIP = 10
 # Number of samples to grab for reference util calibration.
 CALIBRATION_SAMPLES = 10
 
-# Set the fraction of the link utilization that the measurement must exceed
-# to be considered as having enough buffering.
-TARGET_UTIL_FRACTION = 0.98
-
-# Fraction of input bandwidth required to begin the experiment.
-# At exactly 100%, the experiment may take awhile to start, or never start,
-# because it effectively requires waiting for a measurement or link speed
-# limiting error.
-START_BW_FRACTION = 0.9
-
-# Number of samples to take in get_rates() before returning.
-NSAMPLES = 3
-
 # Time to wait between samples, in seconds, as a float.
 SAMPLE_PERIOD_SEC = 0.8
 
@@ -63,7 +51,7 @@ def cprint(s, color, cr=True):
 
 # Parse arguments
 
-parser = ArgumentParser(description="Buffer sizing tests")
+parser = ArgumentParser(description="Mosh tests")
 parser.add_argument('--bw-host', '-B',
                     dest="bw_host",
                     type=float,
@@ -90,11 +78,6 @@ parser.add_argument('--target',
                     type=float,
                     default=TARGET_UTIL_FRACTION)
 
-parser.add_argument('--iperf',
-                    dest="iperf",
-                    help="Path to custom iperf",
-                    required=True)
-
 # Expt parameters
 args = parser.parse_args()
 
@@ -110,8 +93,7 @@ lg.setLogLevel('info')
 class StarTopo(Topo):
     "Star topology for Buffer Sizing experiment"
 
-    def __init__(self, n=3, cpu=None, bw_host=None, bw_net=None,
-                 delay=None, maxq=None):
+    def __init__(self, bw_host=None, delay=None):
         # Add default members to class.
         super(StarTopo, self ).__init__()
 
