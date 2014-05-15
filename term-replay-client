@@ -1,0 +1,88 @@
+#!/usr/bin/perl -w
+
+use strict;
+use IO::Pty::Easy;
+use Time::HiRes;
+
+use bytes;
+
+$|=1;
+
+die "Usage: $0 LOGFILE COMMAND...\n" unless (scalar @ARGV > 1);
+
+my $logfile = shift;
+
+my $command = join " ", @ARGV;
+
+my $pty = new IO::Pty::Easy;
+
+$pty->spawn( $command );
+
+#if ( fork == 0 ) {
+#  while ( $pty->is_active ) {
+#    my $output = $pty->read;
+#    print $output;
+#  }
+#  exit;
+#}
+
+#sleep 10;
+
+open LOGFILE, $logfile or die "$!";
+
+my $last_timestamp = 0;
+
+my $last_tag = "";
+
+my $last_user = 0;
+
+my $last_user_sent = 0;
+
+while ( <LOGFILE> ) {
+  chomp;
+  my ( $timestamp, $tag ) = m{^(\d+) (\w+)};
+
+  if ( $tag eq "HOST" and $last_tag eq "USER" ) {
+    # drain buffer
+    my $got = 0;
+    WAIT: while ( 1 ) {
+      my $x = $pty->read( 0.5 );
+      if ( defined $x ) {
+	$got = 1;
+	print $x;
+	if ( $timestamp - $last_user < 20000 ) {
+	  my $host_recd = Time::HiRes::time();
+	  printf STDERR "Delay: %.10f\n", $host_recd - $last_user_sent;
+	  $last_user = 0;
+	}
+      } else {
+	if ( $got ) {
+	  last WAIT;
+	}
+      }
+    }
+  } elsif ( $tag eq "USER" ) {
+    $last_user = $timestamp;
+  }
+
+  $last_timestamp = $timestamp;
+  $last_tag = $tag;
+
+  if ( $tag eq "SIZE" ) {
+    my ( $width, $height ) = m{SIZE (\d+) (\d+)};
+    print STDERR "New size: $width x $height\n";
+  } else {
+    my ( $len ) = m{\Q$tag\E (\d+)};
+    my $message;
+    read LOGFILE, $message, $len;
+    my $nl;
+    read LOGFILE, $nl, 1;
+    die unless $nl eq "\n";
+
+    if ( $tag eq "USER" ) {
+      $pty->write( $message ) or die;
+      $last_user_sent = Time::HiRes::time();
+#      print (chr 20);
+    }
+  }
+}
