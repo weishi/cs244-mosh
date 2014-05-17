@@ -45,10 +45,15 @@ while ( <LOGFILE> ) {
   if ( $tag eq "HOST" and $last_tag eq "USER" ) {
     # drain buffer
     my $got = 0;
+    my $eof = 0;
     WAIT: while ( 1 ) {
       my $x = $pty->read( 0.5 );
       if ( defined $x ) {
 	$got = 1;
+    $eof++;
+    if ($eof > 50){
+        last;
+    }
 	print $x;
 	if ( $timestamp - $last_user < 20000 ) {
 	  my $host_recd = Time::HiRes::time();
