@@ -20,23 +20,8 @@ from argparse import ArgumentParser
 
 import sys
 import os
-from util.monitor import monitor_qlen
-from util.helper import stdev
 
 import re
-
-
-# Number of samples to skip for reference util calibration.
-CALIBRATION_SKIP = 10
-
-# Number of samples to grab for reference util calibration.
-CALIBRATION_SAMPLES = 10
-
-# Time to wait between samples, in seconds, as a float.
-SAMPLE_PERIOD_SEC = 0.8
-
-# Time to wait for first sample, in seconds, as a float.
-SAMPLE_WAIT_SEC = 3.0
 
 
 def cprint(s, color, cr=True):
@@ -72,17 +57,8 @@ parser.add_argument('--dir', '-d',
                     default="results",
                     required=True)
 
-parser.add_argument('--target',
-                    dest="target",
-                    help="Target utilisation",
-                    type=float,
-                    default=TARGET_UTIL_FRACTION)
-
 # Expt parameters
 args = parser.parse_args()
-
-CUSTOM_IPERF_PATH = args.iperf
-assert(os.path.exists(CUSTOM_IPERF_PATH))
 
 if not os.path.exists(args.dir):
     os.makedirs(args.dir)
@@ -91,7 +67,6 @@ lg.setLogLevel('info')
 
 # Topology to be instantiated in Mininet
 class StarTopo(Topo):
-    "Star topology for Buffer Sizing experiment"
 
     def __init__(self, bw_host=None, delay=None):
         # Add default members to class.
@@ -105,7 +80,7 @@ class StarTopo(Topo):
     def create_topology(self):
         server=self.addHost('server')
         client=self.addHost('client')
-        self.addLink(server,client,bw=self.bw_host,delay='%fms' % (args.rtt/2))
+        self.addLink(server,client,bw=self.bw_host,delay='%fms' % (self.rtt/2))
 
 def avg(s):
     "Compute average of list or string of values"
@@ -144,96 +119,72 @@ def format_fraction(fraction):
 def verify_latency(net):
     print "verify link latency"
     delta=1
-    server=net.getNodeByName('h3')
-    for h in ['h1', 'h2']:
-        hptr=net.getNodeByName(h)
-        cmd='ping -c 5 -q %s' % server.IP()
-        pingResult=hptr.popen(cmd, shell=True)
-        output=pingResult.stdout.read()
-        rtt_search=re.findall('(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+) ms', 
-                output)
-        rttMax=float(rtt_search[0][2])
-        rttMin=float(rtt_search[0][0])
-        if(rttMin < args.delay*2-delta or rttMax > args.delay*2+delta):
-            return False 
+    rtt=500
+    server=net.getNodeByName('server')
+    client=net.getNodeByName('client')
+    cmd='ping -c 2 -q %s' % server.IP()
+    pingResult=client.popen(cmd, shell=True)
+    output=pingResult.stdout.read()
+    print output
+    rtt_search=re.findall('(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+)/(\d+\.\d+) ms', 
+            output)
+    rttMax=float(rtt_search[0][2])
+    rttMin=float(rtt_search[0][0])
+    if(rttMin < rtt-delta or rttMax > rtt+delta):
+        return False 
     cprint('verify latency...OK','green')
     return True
         
-# TODO: Fill in the following function to
-# Start iperf on the receiver node
-# Hint: use getNodeByName to get a handle on the sender node
-# Hint: iperf command to start the receiver:
-#       '%s -s -p %s > %s/iperf_server.txt' %
-#        (CUSTOM_IPERF_PATH, 5001, args.dir)
-# Note: The output file should be <args.dir>/iperf_server.txt
-#       It will be used later in count_connections()
-
-def start_receiver(net):
-    print 'starting receiver iperf'
-    h3=net.getNodeByName('h3')
-    cmd='%s -s -p %s > %s/iperf_server.txt' % (CUSTOM_IPERF_PATH, 5001, args.dir)
-    h3.popen(cmd, shell=True)
-
-# TODO: Fill in the following function to
-# Start args.nflows flows across the senders in a round-robin fashion
-# Hint: use getNodeByName to get a handle on the sender (A or B in the
-# figure) and receiver node (C in the figure).
-# Hint: iperf command to start flow:
-#       '%s -c %s -p %s -t %d -i 1 -yc -Z %s > %s/%s' % (
-#           CUSTOM_IPERF_PATH, server.IP(), 5001, seconds, args.cong, args.dir, output_file)
-# It is a good practice to store output files in a place specific to the
-# experiment, where you can easily access, e.g., under args.dir.
-# It will be very handy when debugging.  You are not required to
-# submit these in your final submission.
-
-def start_senders(net):
-    # Seconds to run iperf; keep this very high
-    seconds = 3600
-    server=net.getNodeByName('h3')
-    for h in ['h1', 'h2']:
-        hptr=net.getNodeByName(h)
-        output_file='iperf_'+h+'.txt'
-        cmd='%s -c %s -p %s -t %d -i 1 -yc -Z %s > %s/%s' % \
-            (CUSTOM_IPERF_PATH, server.IP(), 5001, 
-             seconds, args.cong, args.dir, output_file)
-        for flow in range(args.nflows):
-            hptr.popen(cmd, shell=True)
+def start_test(net):
+    server=net.getNodeByName('server')
+    server.cmd('/usr/sbin/sshd -D &')
+    sleep(3)
+    print 'started sshd'
+    print server.waitOutput()
+    client=net.getNodeByName('client')
+    delaySSH=args.dir+'/delaySSH.txt'
+    stdoutSSH=args.dir+'/stdoutSSH.txt'
+    delayMOSH=args.dir+'/delayMOSH.txt'
+    stdoutMOSH=args.dir+'/stdoutMOSH.txt'
+    rsa='/home/ubuntu/cs244-mosh/id_rsa'
+    keylog='/home/ubuntu/cs244-mosh/keylog.out'
+    term_c='/home/ubuntu/cs244-mosh/term-replay-client'
+    term_s='/home/ubuntu/cs244-mosh/term-replay-server'
+    sshcmd='%s %s ssh ubuntu@%s -i %s -o StrictHostKeyChecking=no "%s %s" > %s 2> %s' % \
+            (term_c, keylog, server.IP(), rsa, term_s, keylog, stdoutSSH, delaySSH)
+    moshcmd='%s %s mosh ubuntu@%s --ssh=\\"ssh -i %s -o StrictHostKeyChecking=no\\" -- %s %s > %s 2> %s' % \
+            (term_c, keylog, server.IP(), rsa, term_s, keylog, stdoutMOSH, delayMOSH)
+    print 'Running SSH test'
+    cprint(sshcmd,'blue')
+    sshsim = client.popen(sshcmd, shell=True)
+    print sshsim.stderr.read()
+    print 'Running MOSH test'
+    cprint(moshcmd,'blue')
+    moshsim = client.popen(moshcmd, shell=True)
+    print moshsim.stderr.read()
 
 def main():
     "Create network and run Buffer Sizing experiment"
 
     start = time()
     # Reset to known state
-    topo = StarTopo(n=args.n, bw_host=args.bw_host,
-                    delay='%sms' % args.delay,
-                    bw_net=args.bw_net, maxq=args.maxq)
+    topo = StarTopo(bw_host=args.bw_host,
+                    delay='%sms' % args.delay)
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink)
     net.start()
     dumpNodeConnections(net.hosts)
     net.pingAll()
 
-    # TODO: verify latency and bandwidth of links in the topology you
-    # just created.
     verify_latency(net)
 
-    start_receiver(net)
+    cprint("[#] Starting experiment", "green")
 
-    start_tcpprobe()
+    start_test(net)
 
-    cprint("Starting experiment", "green")
-
-    start_senders(net)
-
-    # Store output.  It will be parsed by run.sh after the entire
-    # sweep is completed.  Do not change this filename!
-    output = "%d %s %.3f\n" % (total_flows, ret, ret * 1500.0)
-    open("%s/result.txt" % args.dir, "w").write(output)
-
-    # Shut down iperf processes
-    os.system('killall -9 ' + CUSTOM_IPERF_PATH)
+    cprint("[#] Finishing experiment", "green")
 
     net.stop()
-    Popen("killall -9 top bwm-ng tcpdump cat mnexec", shell=True).wait()
+    Popen("sudo killall -9 /usr/bin/perl top bwm-ng tcpdump cat mnexec", shell=True).wait()
     stop_tcpprobe()
     end = time()
 
