@@ -20,27 +20,13 @@ trap ctrlc SIGINT
 start=`date`
 exptid=`date +%b%d-%H:%M`
 
-rootdir=buffersizing-$exptid
+rootdir=mosh-$exptid
 
 echo -e "\nStarting mosh experiment..."
-exit
 
-for run in 1; do
-dir=$rootdir/nf$flows_per_host-r$run
+dir=$rootdir
+python mosh.py --bw-host 1000 --delay 43.5 --dir $dir
+python plot_delay.py $rootdir 
 
-	python buffersizing.py --bw-host 1000 \
-	--bw-net 62.5 \
-	--delay 43.5 \
-	--dir $dir \
-	--nflows $flows_per_host \
-	-n 3 \
-	--iperf $iperf
-
-	python $plotpath/plot_queue.py -f $dir/qlen_$iface.txt -o $dir/q.png
-	python $plotpath/plot_tcpprobe.py -f $dir/tcp_probe.txt -o $dir/cwnd.png --histogram
-done
-
-cat $rootdir/*/result.txt | sort -n -k 1
-python plot-results.py --dir $rootdir -o $rootdir/result.png
 echo "Started at" $start
 echo "Ended at" `date`
