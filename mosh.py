@@ -80,7 +80,10 @@ class StarTopo(Topo):
     def create_topology(self):
         server=self.addHost('server')
         client=self.addHost('client')
-        self.addLink(server,client,bw=self.bw_host,delay='%fms' % (self.rtt/2))
+        self.addLink(server,client,
+                bw=self.bw_host,
+                delay='%fms' % (self.rtt/2),
+                jitter='%fms' % (self.rtt*0.5))
 
 def avg(s):
     "Compute average of list or string of values"
