@@ -36,8 +36,7 @@ rootdir=mosh-$exptid
 
 echo -e "\nStarting mosh experiment..."
 
-dir=$rootdir
-python mosh.py --bw-host 1000 --delay 43.5 --dir $dir
+python mosh.py --dir $rootdir
 python plot_delay.py $rootdir 
 
 echo "Started at" $start
