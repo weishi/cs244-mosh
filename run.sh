@@ -1,12 +1,18 @@
 #!/bin/bash
 
-echo "Checking dependency..."
-apt-get -y install mosh libio-pty-easy-perl
-echo "Importing public key..."
 if [ -f id_rsa.pub ];
 then
+	echo "Checking dependency..."
+	apt-get -y install python-software-properties libio-pty-easy-perl
+	sudo add-apt-repository -y ppa:keithw/mosh
+	sudo apt-get update
+	sudo apt-get install mosh
+	echo -e "Done."
+
+	echo -e "\nImporting public key..."
 	cat id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
 	mv id_rsa.pub id_rsa.done
+	echo -e "Done."
 fi
 
 # Exit on any failure
