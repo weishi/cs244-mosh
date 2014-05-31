@@ -6,7 +6,7 @@ then
 	apt-get -y install python-software-properties libio-pty-easy-perl
 	sudo add-apt-repository -y ppa:keithw/mosh
 	sudo apt-get update
-	sudo apt-get install mosh
+	sudo apt-get -y install mosh
 	echo -e "Done."
 
 	echo -e "\nImporting public key..."
