@@ -20,7 +20,7 @@ for line in open(delaySSHfile, 'r'):
         delaySSH.append(delay)
 
 delaySSH.sort()
-delaySSH=delaySSH[0:-1]
+delaySSH=delaySSH[0:-3]
 for val in delaySSH:
     percentageSSH.append(st.percentileofscore(delaySSH, val, kind='weak'))
 
@@ -31,7 +31,7 @@ for line in open(delayMOSHfile, 'r'):
         delayMOSH.append(delay)
 
 delayMOSH.sort()
-delayMOSH=delayMOSH[0:-1]
+delayMOSH=delayMOSH[0:-3]
 for val in delayMOSH:
     percentageMOSH.append(st.percentileofscore(delayMOSH, val, kind='weak'))
 
