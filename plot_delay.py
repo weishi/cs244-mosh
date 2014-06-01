@@ -6,8 +6,9 @@ import numpy
 import sys
 
 curDir=sys.argv[1]
-delaySSHfile = curDir+'/delaySSH.txt'
-delayMOSHfile = curDir+'/delayMOSH.txt'
+delaySSHfile = curDir+'/'+sys.argv[2]
+delayMOSHfile = curDir+'/'+sys.argv[3]
+outputFile=sys.argv[4]
 delaySSH= []
 delayMOSH= []
 percentageSSH = []
@@ -76,4 +77,4 @@ plt.annotate(strMeanSSH,(meanSSH, pctMeanSSH),
 plt.annotate(strMeanSSH,(meanMOSH, pctMeanMOSH),
         xytext=meanOffset, textcoords='offset points')
 #Output
-plt.savefig(curDir+'/graph.png',bbox_inches='tight')
+plt.savefig(curDir+'/'+outputFile,bbox_inches='tight')

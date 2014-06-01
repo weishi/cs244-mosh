@@ -68,10 +68,22 @@ class StarTopo(Topo):
     def create_topology(self):
         server=self.addHost('server')
         client=self.addHost('client')
+        sen1c=self.addHost('sen1c') # client for sensitivity analysis 1
+        sen2c=self.addHost('sen2c') # client for sensitivity analysis 1
         self.addLink(server,client,
                 bw=self.bw_host,
                 delay='%fms' % (self.rtt/2),
                 jitter='%fms' % (self.rtt*0.5))
+        self.addLink(server,sen1c,
+                bw=self.bw_host,
+                loss=30,
+                delay='%fms' % (self.rtt/2),
+                jitter='%fms' % (self.rtt*0.5))
+        RTT4g=75
+        self.addLink(server,sen2c,
+                bw=self.bw_host,
+                delay='%fms' % (RTT4g/2),
+                jitter='%fms' % (RTT4g*0.5))
 
 def verify_latency(net):
     print "verify link latency"
@@ -118,6 +130,27 @@ def start_test(net):
     cprint(sshcmd,'blue')
     sshsim = client.popen(sshcmd, shell=True)
     print sshsim.stderr.read()
+
+    #Sensitivity analysis 
+    sen1c=net.getNodeByName('sen1c')
+    delayMOSH_sen1=args.dir+'/delayMOSH_sen1.txt'
+    stdoutMOSH_sen1=args.dir+'/stdoutMOSH_sen1.txt'
+    moshcmd_sen1='%s %s mosh ubuntu@%s --ssh=\\"ssh -i %s -o StrictHostKeyChecking=no\\" -- %s %s > %s 2> %s' % \
+            (term_c, keylog, server.IP(), rsa, term_s, keylog, stdoutMOSH_sen1, delayMOSH_sen1)
+    print 'Running MOSH sensitivity test 1'
+    cprint(moshcmd,'blue')
+    moshsim_sen1 = sen1c.popen(moshcmd_sen1, shell=True)
+    print moshsim_sen1.stderr.read()
+
+    sen2c=net.getNodeByName('sen2c')
+    delayMOSH_sen2=args.dir+'/delayMOSH_sen2.txt'
+    stdoutMOSH_sen2=args.dir+'/stdoutMOSH_sen2.txt'
+    moshcmd_sen2='%s %s mosh ubuntu@%s --ssh=\\"ssh -i %s -o StrictHostKeyChecking=no\\" -- %s %s > %s 2> %s' % \
+            (term_c, keylog, server.IP(), rsa, term_s, keylog, stdoutMOSH_sen2, delayMOSH_sen2)
+    print 'Running MOSH sensitivity test 2'
+    cprint(moshcmd,'blue')
+    moshsim_sen2 = sen2c.popen(moshcmd_sen2, shell=True)
+    print moshsim_sen2.stderr.read()
 
 def main():
     "Create network and run Buffer Sizing experiment"
