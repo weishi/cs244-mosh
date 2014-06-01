@@ -1,0 +1,632 @@
+1744047334 SIZE 141 43
+1744223181 HOST 62
+[0;33mcs244-[0;36mip-172-31-41-160:[0;35m~/stm-data⚡[0m 
+1746321796 USER 1
+l
+1746321984 HOST 1
+l
+1746343739 USER 1
+s
+1746343832 HOST 1
+s
+1746479757 USER 1
+
+1746479872 HOST 2
+
+
+1746484812 HOST 160
+depend        Makefile    swrite.hpp  [0m[01;32mterm-receive[0m      term-receive.o      [01;32mterm-replay-server[0m  term-save.cpp  [01;32mterm-send[0m
+1746484938 HOST 2
+
+
+1746485089 HOST 131
+keyout.small  swrite.cpp  swrite.o    term-receive.cpp  [01;32mterm-replay-client[0m  [01;32mterm-save[0m           term-save.o
+1746485199 HOST 2
+
+
+1746486039 HOST 62
+[0;33mcs244-[0;36mip-172-31-41-160:[0;35m~/stm-data⚡[0m 
+1747783934 USER 1
+p
+1747784109 HOST 1
+p
+1747943815 USER 1
+i
+1747943968 HOST 1
+i
+1747999855 USER 1
+n
+1747999989 HOST 1
+n
+1748079800 USER 1
+g
+1748079899 HOST 1
+g
+1748183419 USER 1
+ 
+1748183539 HOST 1
+ 
+1748319643 USER 1
+w
+1748319764 HOST 1
+w
+1748463676 USER 1
+w
+1748463776 HOST 1
+w
+1748623535 USER 1
+w
+1748623633 HOST 1
+w
+1748703680 USER 1
+.
+1748703783 HOST 1
+.
+1748847798 USER 1
+g
+1748847955 HOST 1
+g
+1748967845 USER 1
+o
+1748967946 HOST 1
+o
+1749127834 USER 1
+o
+1749127974 HOST 1
+o
+1749279793 USER 1
+g
+1749279953 HOST 1
+g
+1749383655 USER 1
+l
+1749383805 HOST 1
+l
+1749463928 USER 1
+e
+1749464092 HOST 1
+e
+1749583928 USER 1
+.
+1749584096 HOST 1
+.
+1749727983 USER 1
+c
+1749728155 HOST 1
+c
+1749807657 USER 1
+o
+1749807758 HOST 1
+o
+1749927812 USER 1
+m
+1749927928 HOST 1
+m
+1750087734 USER 1
+
+1750089327 HOST 2
+
+
+1750111079 HOST 58
+PING www.google.com (173.194.79.106) 56(84) bytes of data.
+1750111197 HOST 2
+
+
+1750142912 HOST 83
+64 bytes from pb-in-f106.1e100.net (173.194.79.106): icmp_req=1 ttl=48 time=15.1 ms
+1750143028 HOST 2
+
+
+1751128605 HOST 83
+64 bytes from pb-in-f106.1e100.net (173.194.79.106): icmp_req=2 ttl=48 time=14.9 ms
+1751128754 HOST 2
+
+
+1752129890 HOST 83
+64 bytes from pb-in-f106.1e100.net (173.194.79.106): icmp_req=3 ttl=48 time=14.5 ms
+1752130020 HOST 2
+
+
+1752768347 USER 1
+
+1752768435 HOST 2
+^C
+1752768583 HOST 2
+
+
+1752768715 HOST 38
+--- www.google.com ping statistics ---
+1752768818 HOST 2
+
+
+1752768939 HOST 62
+3 packets transmitted, 3 received, 0% packet loss, time 2003ms
+1752769039 HOST 2
+
+
+1752769163 HOST 52
+rtt min/avg/max/mdev = 14.597/14.911/15.167/0.236 ms
+1752769272 HOST 2
+
+
+1752770164 HOST 62
+[0;33mcs244-[0;36mip-172-31-41-160:[0;35m~/stm-data⚡[0m 
+1753464037 USER 1
+l
+1753464184 HOST 1
+l
+1753559959 USER 1
+s
+1753560064 HOST 1
+s
+1753624205 USER 1
+
+1753624271 HOST 2
+
+
+1753629034 HOST 160
+depend        Makefile    swrite.hpp  [0m[01;32mterm-receive[0m      term-receive.o      [01;32mterm-replay-server[0m  term-save.cpp  [01;32mterm-send[0m
+1753629159 HOST 2
+
+
+1753629291 HOST 131
+keyout.small  swrite.cpp  swrite.o    term-receive.cpp  [01;32mterm-replay-client[0m  [01;32mterm-save[0m           term-save.o
+1753629395 HOST 2
+
+
+1753630210 HOST 62
+[0;33mcs244-[0;36mip-172-31-41-160:[0;35m~/stm-data⚡[0m 
+1759025202 USER 1
+v
+1759025355 HOST 1
+v
+1759176742 USER 1
+i
+1759176890 HOST 1
+i
+1759216323 USER 1
+m
+1759216418 HOST 1
+m
+1759464618 USER 1
+ 
+1759464768 HOST 1
+ 
+1760417006 USER 1
+M
+1760417159 HOST 1
+M
+1760552636 USER 1
+	
+1760580753 HOST 8
+akefile 
+1761048531 USER 1
+
+1761048642 HOST 2
+
+
+1761555228 HOST 15
+[?1049h[?1h=
+1761556881 HOST 66
+[1;43r[?12;25h[?12l[?25h[27m[m[H[2J[?25l[43;1H"Makefile"
+1761557148 HOST 10
+ 27L, 641C
+1761561376 HOST 4
+[>c
+1761562931 HOST 2034
+[1;1H[36msource [m= swrite.cpp term-receive.cpp
+[36mobjects [m= swrite.o
+[36mexecutables [m= term-save term-receive
+
+[36mCXX [m= g++
+[36mCXXFLAGS [m= -g -O2 --std=c++0x -pedantic -Werror -Wall -Wextra -Weffc++ -fno-default-inline -pipe -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=500 --[7;1HD_GNU_SOURCE -D_BSD_SOURCE
+[36mLIBS [m= -lutil -lrt
+
+[36mall:[m [36m$(executables)
+
+term-save:[m term-save.o [36m$(objects)[m
+[33m        [m[36m$(CXX)[m[33m [m[36m$(CXXFLAGS)[m[33m -o [m[36m$@[m[33m [m[36m$+[m[33m [m[36m$(LIBS)
+
+term-receive:[m term-receive.o [36m$(objects)[m
+[33m        [m[36m$(CXX)[m[33m [m[36m$(CXXFLAGS)[m[33m -o [m[36m$@[m[33m [m[36m$+[m[33m [m[36m$(LIBS)
+
+%.o:[m [36m%[m.cpp
+[33m        [m[36m$(CXX)[m[33m [m[36m$(CXXFLAGS)[m[33m -c -o [m[36m$@[m[33m [m[36m$<[m
+
+[35m-include[m depend
+
+[36mdepend:[m [36m$(source)[m
+[33m        [m[36m$(CXX)[m[33m [m[36m$(INCLUDES)[m[33m -MM [m[36m$(source)[m[33m > depend
+
+.PHONY:[m clean
+[36mclean:[m
+[35m        -[m[33mrm -f [m[36m$(executables)[m[33m depend *.o[m
+[34m~                                                                                                                                            [30;1H~                                                                                                                                            [31;1H~                                                                                                                                            [32;1H~                                                                                                                                            [33;1H~                                                                                                                                            [34;1H~                                                                                                                                            
+1761563251 HOST 1225
+[35;1H~                                                                                                                                            [36;1H~                                                                                                                                            [37;1H~                                                                                                                                            [38;1H~                                                                                                                                            [39;1H~                                                                                                                                            [40;1H~                                                                                                                                            [41;1H~                                                                                                                                            [42;1H~                                                                                                                                            [m[43;124H1,1[11CAll[1;1H[?12l[?25h
+1761585513 USER 9
+[>0;95;c
+1762521101 USER 1
+j
+1762521542 HOST 34
+[?25l[43;124H2[2;1H[?12l[?25h
+1762704393 USER 1
+j
+1762704631 HOST 34
+[?25l[43;124H3[3;1H[?12l[?25h
+1762872512 USER 1
+j
+1762872749 HOST 38
+[?25l[43;124H4,0-1[4;1H[?12l[?25h
+1765513116 USER 1
+j
+1765513523 HOST 38
+[?25l[43;124H5,1  [5;1H[?12l[?25h
+1765777159 USER 1
+j
+1765777564 HOST 34
+[?25l[43;124H6[6;1H[?12l[?25h
+1766049039 USER 1
+d
+1766184840 USER 1
+d
+1766185373 HOST 382
+[?25l[6;42r[6;1H[2M[1;43r[41;1H[34m~                                                                                                                                            [42;1H~                                                                                                                                            [m[43;1H[K[43;124H6,1[11CAll[6;1H[?12l[?25h
+1767313039 USER 1
+u
+1767313291 HOST 62
+[?25l[43;1H1 more line; before #1  1 seconds ago[43;124H[K
+1767313936 HOST 260
+[6;42r[6;1H[2L[1;43r[6;1H[36mCXXFLAGS [m= -g -O2 --std=c++0x -pedantic -Werror -Wall -Wextra -Weffc++ -fno-default-inline -pipe -D_FILE_OFFSET_BITS=64 -D_XOPEN_SOURCE=500 --[7;1HD_GNU_SOURCE -D_BSD_SOURCE[43;1H[K[43;124H6,1[11CAll[6;1H[?12l[?25h
+1768169028 USER 1
+:
+1768169146 HOST 26
+[?25l[43;124H[K[43;1H:
+1768169300 HOST 12
+[?12l[?25h
+1768264883 USER 1
+q
+1768264993 HOST 1
+q
+1768265121 HOST 18
+[?25l[?12l[?25h
+1768393179 USER 1
+
+1768393260 HOST 1
+
+1768406630 HOST 6
+[?25l
+1768406806 HOST 24
+[43;1H[K[43;1H[?1l>
+1768406930 HOST 20
+[?12l[?25h[?1049l
+1768411398 HOST 62
+[0;33mcs244-[0;36mip-172-31-41-160:[0;35m~/stm-data⚡[0m 
+1772649305 USER 1
+d
+1772649459 HOST 1
+d
+1772769263 USER 1
+i
+1772769360 HOST 1
+i
+1772849252 USER 1
+g
+1772849346 HOST 1
+g
+1772993154 USER 1
+ 
+1772993249 HOST 1
+ 
+1773192864 USER 1
+w
+1773193049 HOST 1
+w
+1773361585 USER 1
+w
+1773361698 HOST 1
+w
+1773505512 USER 1
+w
+1773505615 HOST 1
+w
+1773689444 USER 1
+.
+1773689552 HOST 1
+.
+1773849633 USER 1
+g
+1773849729 HOST 1
+g
+1773953549 USER 1
+o
+1773953644 HOST 1
+o
+1774113234 USER 1
+o
+1774113335 HOST 1
+o
+1774161346 USER 1
+g
+1774161441 HOST 1
+g
+1774305389 USER 1
+l
+1774305488 HOST 1
+l
+1774409379 USER 1
+e
+1774409474 HOST 1
+e
+1774513327 USER 1
+.
+1774513422 HOST 1
+.
+1774633608 USER 1
+c
+1774633707 HOST 1
+c
+1774729382 USER 1
+o
+1774729493 HOST 1
+o
+1774833291 USER 1
+m
+1774833403 HOST 1
+m
+1774993627 USER 1
+
+1774993728 HOST 2
+
+
+1775300435 HOST 2
+
+
+1775300577 HOST 39
+; <<>> DiG 9.8.1-P1 <<>> www.google.com
+1775300690 HOST 2
+
+
+1775300804 HOST 23
+;; global options: +cmd
+1775300904 HOST 2
+
+
+1775301084 HOST 14
+;; Got answer:
+1775301187 HOST 2
+
+
+1775301313 HOST 56
+;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3272
+1775301418 HOST 2
+
+
+1775301537 HOST 68
+;; flags: qr rd ra; QUERY: 1, ANSWER: 6, AUTHORITY: 0, ADDITIONAL: 0
+1775301638 HOST 2
+
+
+1775301871 HOST 2
+
+
+1775301969 HOST 20
+;; QUESTION SECTION:
+1775302054 HOST 2
+
+
+1775302136 HOST 16
+;www.google.com.
+1775302219 HOST 1
+	
+1775302303 HOST 1
+	
+1775302385 HOST 1
+	
+1775302468 HOST 2
+IN
+1775302550 HOST 1
+	
+1775302633 HOST 1
+A
+1775302715 HOST 2
+
+
+1775302841 HOST 2
+
+
+1775302951 HOST 18
+;; ANSWER SECTION:
+1775303038 HOST 2
+
+
+1775303121 HOST 15
+www.google.com.
+1775303205 HOST 1
+	
+1775303288 HOST 1
+	
+1775303370 HOST 2
+27
+1775303452 HOST 1
+	
+1775303534 HOST 2
+IN
+1775303616 HOST 1
+	
+1775303698 HOST 1
+A
+1775303781 HOST 1
+	
+1775303863 HOST 14
+173.194.79.105
+1775303946 HOST 2
+
+
+1775304044 HOST 15
+www.google.com.
+1775304131 HOST 1
+	
+1775304214 HOST 1
+	
+1775304297 HOST 2
+27
+1775304382 HOST 1
+	
+1775304469 HOST 2
+IN
+1775304556 HOST 1
+	
+1775304643 HOST 1
+A
+1775304729 HOST 1
+	
+1775304816 HOST 14
+173.194.79.106
+1775304903 HOST 2
+
+
+1775304989 HOST 15
+www.google.com.
+1775305077 HOST 1
+	
+1775305164 HOST 1
+	
+1775305250 HOST 2
+27
+1775305341 HOST 1
+	
+1775305428 HOST 2
+IN
+1775305514 HOST 1
+	
+1775305601 HOST 1
+A
+1775305703 HOST 1
+	
+1775305799 HOST 14
+173.194.79.147
+1775305886 HOST 2
+
+
+1775305974 HOST 15
+www.google.com.
+1775306062 HOST 1
+	
+1775306148 HOST 1
+	
+1775306234 HOST 2
+27
+1775306321 HOST 1
+	
+1775306411 HOST 2
+IN
+1775306500 HOST 1
+	
+1775306588 HOST 1
+A
+1775306707 HOST 1
+	
+1775306800 HOST 13
+173.194.79.99
+1775306889 HOST 2
+
+
+1775306978 HOST 15
+www.google.com.
+1775307068 HOST 1
+	
+1775307157 HOST 1
+	
+1775307246 HOST 2
+27
+1775307334 HOST 1
+	
+1775307422 HOST 2
+IN
+1775307510 HOST 1
+	
+1775307599 HOST 1
+A
+1775307687 HOST 1
+	
+1775307775 HOST 14
+173.194.79.103
+1775307864 HOST 2
+
+
+1775307953 HOST 15
+www.google.com.
+1775308056 HOST 1
+	
+1775308148 HOST 1
+	
+1775308237 HOST 2
+27
+1775308326 HOST 1
+	
+1775308416 HOST 2
+IN
+1775308504 HOST 1
+	
+1775308592 HOST 1
+A
+1775308680 HOST 1
+	
+1775308822 HOST 14
+173.194.79.104
+1775308925 HOST 2
+
+
+1775309016 HOST 2
+
+
+1775309141 HOST 21
+;; Query time: 9 msec
+1775309237 HOST 2
+
+
+1775309338 HOST 36
+;; SERVER: 172.31.0.2#53(172.31.0.2)
+1775309432 HOST 2
+
+
+1775309630 HOST 33
+;; WHEN: Sun Jun  1 18:29:29 2014
+1775309752 HOST 2
+
+
+1775309856 HOST 22
+;; MSG SIZE  rcvd: 128
+1775310186 HOST 4
+
+
+
+1775311666 HOST 62
+[0;33mcs244-[0;36mip-172-31-41-160:[0;35m~/stm-data⚡[0m 
+1777113672 USER 1
+e
+1777113827 HOST 1
+e
+1777297778 USER 1
+x
+1777297895 HOST 1
+x
+1777433642 USER 1
+i
+1777433744 HOST 1
+i
+1777537609 USER 1
+t
+1777537706 HOST 1
+t
+1777641927 USER 1
+
+1777642003 HOST 2
+
+
+1777642272 HOST 4
+exit
+1777642399 HOST 2
+
+

@@ -38,7 +38,7 @@ echo -e "\nStarting mosh experiment..."
 
 python mosh.py --dir $rootdir
 python plot_delay.py $rootdir delaySSH.txt delayMOSH.txt graph.png 'Sprint 3G'
-python plot_delay.py $rootdir delaySSH_sen1.txt delayMOSH_sen1.txt graph_sen1.png 'Sprint 3G + 30%loss'
+python plot_delay.py $rootdir delaySSH_sen1.txt delayMOSH_sen1.txt graph_sen1.png 'WiFi + 10% loss'
 python plot_delay.py $rootdir delaySSH_sen2.txt delayMOSH_sen2.txt graph_sen2.png '4G LTE'
 
 echo "Started at" $start

@@ -63,6 +63,7 @@ class StarTopo(Topo):
         # http://en.wikipedia.org/wiki/Comparison_of_wireless_data_standards
         self.bw_host = 3 #3Mb/s 
         self.rtt= 500 
+        self.rttWifi=10
         self.rtt4g=75
         self.create_topology()
 
@@ -79,9 +80,9 @@ class StarTopo(Topo):
                 jitter='%fms' % (self.rtt*0.5))
         self.addLink(sen1s,sen1c,
                 bw=self.bw_host,
-                loss=30,
-                delay='%fms' % (self.rtt/2),
-                jitter='%fms' % (self.rtt*0.5))
+                loss=10,
+                delay='%fms' % (self.rttWifi/2),
+                jitter='%fms' % (self.rttWifi*0.5))
         self.addLink(sen2s,sen2c,
                 bw=self.bw_host,
                 delay='%fms' % (self.rtt4g/2),
@@ -116,7 +117,7 @@ def start_test(net):
     delayMOSH=args.dir+'/delayMOSH.txt'
     stdoutMOSH=args.dir+'/stdoutMOSH.txt'
     rsa='/home/ubuntu/cs244-mosh/id_rsa'
-    keylog='/home/ubuntu/cs244-mosh/keylog.small'
+    keylog='/home/ubuntu/cs244-mosh/keylog.big'
     term_c='/home/ubuntu/cs244-mosh/term-replay-client'
     term_s='/home/ubuntu/cs244-mosh/term-replay-server'
     sshcmd='%s %s ssh ubuntu@%s -i %s -o StrictHostKeyChecking=no "%s %s" > %s 2> %s' % \
@@ -134,6 +135,7 @@ def start_test(net):
     print sshsim.stderr.read()
 
     #Sensitivity analysis 
+    keylog='/home/ubuntu/cs244-mosh/keylog.small'
     server=net.getNodeByName('sen1s')
     server.cmd('/usr/sbin/sshd -D &')
     sleep(2)
@@ -187,7 +189,7 @@ def main():
     net = Mininet(topo=topo, host=CPULimitedHost, link=TCLink)
     net.start()
     dumpNodeConnections(net.hosts)
-    net.pingAll()
+    #net.pingAll()
 
     verify_latency(net)
 
