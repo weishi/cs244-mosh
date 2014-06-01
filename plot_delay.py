@@ -9,6 +9,7 @@ curDir=sys.argv[1]
 delaySSHfile = curDir+'/'+sys.argv[2]
 delayMOSHfile = curDir+'/'+sys.argv[3]
 outputFile=sys.argv[4]
+subtitle=sys.argv[5]
 delaySSH= []
 delayMOSH= []
 percentageSSH = []
@@ -60,8 +61,7 @@ meanOffset=(5,5)
 plt.figure()
 plt.plot(delaySSH, percentageSSH)
 plt.plot(delayMOSH, percentageMOSH)
-plt.title('Cumulative distribution of keystroke response\n\
-        times with Sprint EV-DO (3G) Internet service')
+plt.title('Cumulative distribution of keystroke response\ntime with '+subtitle)
 #Median
 plt.plot(delaySSH[medianSSH], percentageSSH[medianSSH], 'ro')
 plt.plot(delayMOSH[medianMOSH], percentageMOSH[medianMOSH], 'ro')
