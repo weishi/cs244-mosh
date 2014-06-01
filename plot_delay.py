@@ -62,6 +62,8 @@ plt.figure()
 plt.plot(delaySSH, percentageSSH)
 plt.plot(delayMOSH, percentageMOSH)
 plt.title('Cumulative distribution of keystroke response\ntime with '+subtitle)
+plt.ylabel('Percentage')
+plt.xlabel('Keystroke response time(seconds)')
 #Median
 plt.plot(delaySSH[medianSSH], percentageSSH[medianSSH], 'ro')
 plt.plot(delayMOSH[medianMOSH], percentageMOSH[medianMOSH], 'ro')
