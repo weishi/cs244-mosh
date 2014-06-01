@@ -36,7 +36,24 @@ cd cs244-mosh
 sudo ./run.sh
 ```
 The script will first try to install any dependency packages.
-Each replay(SSH/MOSH) may take up to 15min.
-To see the progress, you can monitor stdoutSSH.txt/stdoutMOSH.txt.
+The script will run 3 sets of experiment.
+The first one will reproduce the result from paper.
+The other two are for sensitivity analysis.
+The second one will run the simulation over a WiFi link with 10% loss rate.
+The thrid one will run the simulation over a 4G LTE link.
 
-The result graph.png is created in 'mosh-{timestamp}' directory
+This first replay(SSH/MOSH) may take up to 15min, because it uses a large dataset.
+The other two may take up to 5min. They use a smaller dataset, because the
+loss rate will significantly increase the simulation time.
+
+Sometimes(very rarely), the second replay(sensitivity analysis 1) may get stuck
+due to the randomness of loss. 
+The problem usually goes away after restarting the script.
+To see the progress, you can monitor stdoutSSH.txt/stdoutMOSH.txt, etc.
+
+### Result
+The result graphs are created in 'mosh-{timestamp}' directory.
+
++ `graph.png`: the main result that should match Figure 2 in the paper. 
++ `graph_sen1.png`: the result for sensitivity analysis 1.
++ `graph_sen2.png`: the result for sensitivity analysis 2.
