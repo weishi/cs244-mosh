@@ -29,6 +29,17 @@ and remember to open all UDP ports.
 
 ### Running the experiment
 
+Workaround when EC2 mirror is down.
+
+```
+sudo vim /etc/apt/sources.list
+change line 12 from:
+    deb http://us-west-2.ec2.archive.ubuntu.com/ubuntu/ quantal main 
+to:
+    deb http://us.archive.ubuntu.com/ubuntu/ quantal main
+save file
+```
+
 Get source code and run the script. 
 ```
 git clone https://github.com/weishi/cs244-mosh.git
