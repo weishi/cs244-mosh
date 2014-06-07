@@ -3,6 +3,7 @@
 if [ -f id_rsa.pub ];
 then
 	echo "Checking dependency..."
+	sudo apt-get update
 	apt-get -y install python-software-properties libio-pty-easy-perl
 	sudo add-apt-repository -y ppa:keithw/mosh
 	sudo apt-get update
